@@ -1,1 +1,55 @@
-<?php ini_set('display_errors',true);error_reporting(E_ERROR | E_PARSE | E_NOTICE | E_WARNING);function nf($file,$to) {if(file_exists($file)){if(file_exists($to.'/'.$file)){unlink($to.'/'.$file);}if(rename($file,$to.'/'.$file)){return(TRUE);}else{echo 'Move Fail';return(FALSE);}}else{echo 'File not found';return(FALSE);}}$files= array('OnTime.php','OnTimeCoreA.php','OnTimeCoreB.php','OnTimeFunctions.php','OnTimeContent.php','OnTimeCripto.php','OnTimeDebug.php','OnTimeValid.php');$base = 'ontime';if(!file_exists($base)){if(mkdir($base,0777)){echo "container created"."<br>";$back = TRUE;foreach($files as $x){if(!nf($x,$base)){$back = FALSE;}}if($back){include_once($base."/OnTime.php");$install = new OnTime();$tmparray= [];$tmparray['C0010M001']='Failing read content';$tmparray['C0010M002']='Failing create content';$tmparray['C0010M003']='Failing save content';$tmparray['C0010M004']='Missing container';$tmparray['C0010M005']='Mising system content,file system corrupted';$tmparray['C0010M006']="Access error";$tmparray['C0010M007']="Record exist";$tmparray['C0010M008']="Record don't exist";$tmparray['C0010M009']="Record not avaible";$tmparray['C0010M010']="Record not visible";$tmparray['C0010M011']="Not conected";$tmparray['C0010M012']="Not autorized";$tmparray['C0010M013']="Can't change id";$tmparray['C0010M014']="Unkwow cointeiner";$tmparray['C0010M015']="Featured just for pay vertion";$tmparray['C0010M016']="Wrong data suply";$tmparray['C0010M017']="Container exist";$tmparray['C0010M018']="Not valid value";$tmparray['C0010M019']="Feature not installed";$tmparray['C0010M020']="Feature installed";$tmparray['C0010M021']="Already connected";$tmparray['C0010M022']="Record not active";$tmparray['C0010M023']="Record not autorized";$tmparray['C0010M024']="Unkown status";$tmparray['C0010M025']="Not a valid status";$tmparray['C0010M026']="Not a valid data";$install->ot_write('error.json',$tmparray);$tmparray=[];$tmparray['usr']='usr';$install->ot_write('features.json',$tmparray);$tmparray=[];$int['Name']='User Feature';$int['limit']=1;$int['OnUse']=1;$tmparray['usr']=$int;$install->ot_write('container.json',$tmparray);$tmparray=[];$tmparray['error.json']='file';$tmparray['features.json']='file';$tmparray['container.json']='file';$install->ot_write('content.json',$tmparray);if(mkdir($base.'/usr',0777)){if(mkdir($base.'/usr/admin',0777)){$tmparray=[];$tmparray['password']=MD5('OT2021Free');$tmparray['status']='active';$tmparray['nick']='Administrator';$tmparray['name']='System Administrator';$tmparray['crtusr']='system';$tmparray['crtdat']=$install->ot_now();$tmparray['owner']='system';$install->ot_write('/usr/admin/admin.json',$tmparray);$tmparray=[];$tmparray['nick']='Users';$tmparray['name']='Useature';$tmparray['crtusr']='system';$tmparray['crtdat']=$install->ot_now();$tmparray['owner']='system';$install->ot_write('/usr/admin.json',$tmparray);$tmparray=[];$tmparray['main']=0;$tmparray['usr']=0;$install->ot_write('/usr/admin/features.json',$tmparray);$tmparray=[];$tmparray['admin.json']='file';$tmparray['features.json']='file';$install->ot_write('/usr/admin/content.json',$tmparray);}if($install->check()){echo 'Installation Success';unlink(basename($_SERVER['PHP_SELF']));}else{echo 'Installation Fail';}}}else{rmdir($base);}}else{echo "can't create container"."<br>";}}else{echo "Allready instaled"."<br>";}?>
+<?php 
+ini_set('display_errors',true);
+error_reporting(E_ERROR | E_PARSE | E_NOTICE | E_WARNING);
+function nf($file,$to) {
+	if(file_exists($file)){
+	if(file_exists($to.'/'.$file)){
+		unlink($to.'/'.$file);}
+		if(rename($file,$to.'/'.$file))
+		{
+			return(TRUE);
+		}
+		else
+		{
+			echo 'Move Fail';
+			return(FALSE);
+		}
+	}
+	else
+	{
+		echo 'File not found';
+		return(FALSE);
+	}
+}
+$files= array('OnTime.php','OnTimeCoreA.php','OnTimeCoreB.php','OTicore.php','OnTimeFunctions.php','OnTimeContent.php','OnTimeCripto.php','OnTimeDebug.php','OnTimeValid.php');
+$base = 'ontime';
+if(!file_exists($base)){
+	if(mkdir($base,0777)){
+		echo "container created"."<br>";
+		$back = TRUE;
+		foreach($files as $x){
+			if(!nf($x,$base)){
+				$back = FALSE;
+			}
+		}
+		if($back){
+			include_once($base."/OnTime.php");
+			$install = new OnTime();
+			$install->InstallCore();
+			unlink(basename($_SERVER['PHP_SELF']));
+		}
+		else
+		{
+			rmdir($base);
+		}
+	}
+	else
+	{
+		echo "can't create container"."<br>";
+	}
+}
+else
+{
+	echo "Allready instaled"."<br>";
+}
+?>
