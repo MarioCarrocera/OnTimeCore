@@ -3,6 +3,7 @@ The main class (Core)
 The OnTime framework is designed to be modular, scalable and comprehensive, so that each new feature integrates without difficulty and maintains a unique class definition (OnTime) and all "additional classes" are "trait" that enrich it, in such a way that an integrated system is obtained, not separate programs which do not necessarily have to behave correctly together.
 
 Installation in test environment:
+
 1.- Create an empty directory within the web container location (only for example purposes it is considered to be called “demo”).
 
 2.- Copy all the files in the directory (make sure to assign user permissions)
