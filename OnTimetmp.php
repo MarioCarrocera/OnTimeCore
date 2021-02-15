@@ -7,8 +7,10 @@ include_once("OnTimeValid.php");
 include_once("OnTimeDebug.php");
 include_once("OnTimeCoreA.php");
 include_once("OnTimeCoreB.php");
+include_once("OTicore.php");
 
 class OnTime{
+	use OTcore;
 	use CoreB;
 	use CoreA;
 	use Functions;
