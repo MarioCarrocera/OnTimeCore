@@ -4,23 +4,44 @@ ini_set('display_errors', true);
 error_reporting(E_ERROR | E_PARSE | E_NOTICE | E_WARNING);
 
 $base='ontime/';
+$AdminPassword='OT2021Free';
 include_once($base."OnTime.php");
 
-echo "********** <br> Main containe <br> ********** <br> <br>";
+echo "********** <br> Create Class  <br> ********** <br> <br>";
+$demo=new OnTime();
+$demo->ot_error('basic content exist').'<br>';
 
-echo "Open: ";$demo=new OnTime();$demo->ot_error('basic content exist').'<br>';
 
-
+echo "**********+++++++++++ <br> Where not conected <br> **********+++++++++++ <br> <br>";
 echo "Id when not conected: ";echo $demo->id; echo "<br>";
 echo "Conecion statust: ";
 if ($demo->conected) {
 	echo "True";} else {
 	echo "False";}; echo "<br>";
-echo "Showing Original Errors:  <br>";$demo->ot_show($demo->errtext);echo "<br>" ;
-echo "Showing Original Content: <br>";$demo->ot_show($demo->content); echo "<br>";
-echo "Showing Original Features  <br>";$demo->ot_show($demo->features);echo "<br>";
+echo "********** <br> Show Errors<br> ********** <br> <br>";
+$demo->ot_show($demo->errtext);
+echo "********** <br> Show features<br> ********** <br> <br>";
+$demo->ot_show($demo->features);
+echo "********** <br> Show content<br> ********** <br> <br>";
+$demo->ot_show($demo->content);
+echo "********** <br> Show Level<br> ********** <br> <br>";
+$demo->ot_show($demo->level);
+echo "********** <br> Show Status<br> ********** <br> <br>";
+$demo->ot_show($demo->status);
 
-echo "Try conect with correct info ->Connect('admin','OT2021Free'): ";$demo->Connect('admin','OT2021Free');$demo->ot_error("Connent!!!");
+echo "**********+++++++++++ <br> Conecting like admin <br> **********+++++++++++ <br> <br>";
+echo "Connect('admin','OT2021Free') ";
+$demo->Connect('admin','OT2021Fre');
+echo  "<br>";$demo->ot_error("Conected!!!");echo "<br>";
+echo "Connect('Admin','OT2021Free') ";
+$demo->Connect('Admin',$AdminPassword);
+echo  "<br>";$demo->ot_error("Conected!!!");echo "<br>";
+echo "Connect('admin','OT2021Free') ";
+$demo->Connect('admin',$AdminPassword);
+echo  "<br>";$demo->ot_error("Conected!!!");echo "<br>";
+
+echo "**********+++++++++++ <br> Loaded on conection <br> **********+++++++++++ <br> <br>";
+
 if ($demo->conected) {
 	echo "Id when conected: ";echo $demo->id; echo "<br>";
 	echo "Showing Public Information of the user <br>";$demo->ot_show($demo->user);echo "<br>";
@@ -28,246 +49,416 @@ if ($demo->conected) {
 	echo "Showing Safety of the user <br>";$demo->ot_show($demo->safety);echo "<br>";
 }
 
-echo "********** <br> Create User <br> ********** <br> <br>";
-echo "UserAdd('admin','xxx','active','name','nick')";
-$demo->UserAdd('admin','xxx','active','name','active');$demo->ot_error("Create!!!");
-echo "UserAdd('Demo','12345','active','name','nick')";
-$demo->UserAdd('Demo','12345','active','Demostration user ','Demito');$demo->ot_error("Create!!!");
-$demo->UserAdd('Demo1','12345','active','Demostration 1 ','me');$demo->ot_error("Create!!!");
-$demo->UserAdd('Demo2','12345','active','Demostration two ','you');$demo->ot_error("Create!!!");
-$demo->UserAdd('Demo3','12345','active','Demostration 3 ','all');$demo->ot_error("Create!!!");
-$demo->UserAdd('Demo4','12345','active','Demostration dour ','us are');$demo->ot_error("Create!!!");
+echo "**********+++++++++++ <br> Try conect where conected <br> **********+++++++++++ <br> <br>";
+echo "Connect('admin','OT2021Free') ";
+$demo->Connect('admin',$AdminPassword);
+echo  "<br>";$demo->ot_error("Conected!!!");echo "<br>";
 
-echo "********** <br> Password Options <br> ********** <br> <br>";
-
-echo "Check password PssChk('Demo','12345'): ";
-$demo->PssChk('Demo','12345');$demo->ot_error(" Password Ok!");
-echo "Check status UserChkStt('Demo'): ";
-echo $demo->UserChkStt('Demo');$demo->ot_error(" Current Value!");
-echo "Change status  UserChkStt('Demo'): ";
-$demo->UserChgStt('Demo','force');$demo->ot_error(" Change is ok!");
-echo "DiscConnect(): ";
-$demo->DiscConnect();$demo->ot_error(" Disconected!");
-echo "Try conect ->Connect('Demo','12345'): ";$demo->Connect('Demo','12345');$demo->ot_error("Connent!!!");
-echo "Force change password->FrcPssChg('Demo','12345','54321'): ";$demo->FrcPssChg('Demo','12345','54321');$demo->ot_error("Changed!!!");
-
-
-
-echo "********** <br> User Information Options <br> ********** <br> <br>";
-echo "Show user  UserShwPub('admin'): ";$tmp=$demo->UserShwPbl('admin');$demo->ot_error("Readed!!!");
-echo "information <br>";$demo->ot_show($tmp);echo "<br>";
-echo "Try conect ->Connect('Demo','54321'): ";$demo->Connect('Demo','54321');$demo->ot_error("Connent!!!");
-if ($demo->conected) {
-	echo "Id when conected: ";echo $demo->id; echo "<br>";
-	echo "Showing Public Information of the user <br>";$demo->ot_show($demo->user);echo "<br>";
-	echo "Showing Private Information of the user <br>";$demo->ot_show($demo->userp);echo "<br>";
-	echo "Showing Safety of the user <br>";$demo->ot_show($demo->safety);echo "<br>";
-}
-
-echo "Try change my name & nick  ->MyChgInf('Mario Carrocera','Marioc')";
-$demo->MyChgInf('Mario Carrocera','Marioc');$demo->ot_error("Change!!!");
-
-
-echo '<br>'."Try add informtion in my public info ->MyAddPbl('hobies','play & program')";$demo->MyAddPbl('hobies','play & program');$demo->ot_error("Added!!!");
-echo "Showing Public Information of the user <br>";$demo->ot_show($demo->user);echo "<br>";
-
-echo "Try add informtion in my public info ->MyAddPbl('Wife','Bety')";$demo->MyAddPbl('Wife','Bety');$demo->ot_error("Added!!!");
-
-echo "Try add informtion in my public info ->MyAddPbl('dog','Robert')";$demo->MyAddPbl('dog','Robert');$demo->ot_error("Added!!!");
-
-echo "Showing Public Information of the user <br>";$demo->ot_show($demo->user);echo "<br>";
-
-echo "Try change informtion in my public info ->MychgPbl('dog','Boby')";$demo->MyChgPbl('dog','Boby');$demo->ot_error("Changed!!!");
-
-echo "Showing Public Information of the user <br>";$demo->ot_show($demo->user);echo "<br>";
-
-echo "Try delete informtion in my public info ->MyDltPbl('Wife')";$demo->MyDltPbl('Wife');$demo->ot_error("Deleted!!!");
-
-echo "Showing Public Information of the user <br>";$demo->ot_show($demo->user);echo "<br>";
-
-echo "Try add information in my private info ->>MyAddPrv('phone','Sorry private')";$demo->MyAddPrv('phone','Sorry private');$demo->ot_error("Added!!!");
-echo "Showing private Information of the user <br>";$demo->ot_show($demo->userp);echo "<br>";
-
-echo "Try add informtion in my private info ->MyAddPrv('Wife','Bety')";$demo->MyAddPrv('Wife','Bety');$demo->ot_error("Added!!!");
-
-echo "Try add informtion in my private info ->MyAddPrv('Familiy','Robert')";$demo->MyAddPrv('Familiy','Robert');$demo->ot_error("Added!!!");
-
-echo "Showing private Information of the user <br>";$demo->ot_show($demo->userp);echo "<br>";
-
-echo "Try change informtion in my private info ->MychgPbl('Familiy','Boby')";$demo->MyChgPrv('Familiy','Carrocera');$demo->ot_error("Changed!!!");
-
-echo "Showing private Information of the user <br>";$demo->ot_show($demo->userp);echo "<br>";
-
-echo "Try delete informtion in my private info ->MyDltPbl('Familiy')";$demo->MyDltPrv('Familiy');$demo->ot_error("Deleted!!!");
-
-echo "Showing private Information of the user <br>";$demo->ot_show($demo->userp);echo "<br>";
-
-echo "Showing private Information of the user <br>";$demo->ot_show($demo->userp);echo "<br>";
-
-echo "********** <br> Error Options <br> ********** <br> <br>";
-
-$demo->DiscConnect();
-$demo->Connect('admin','OT2021Free');
-
-echo "Try Adding new error >ErrAdd('MyError','Description')";
-$demo->ErrAdd('MyError','Description');
-$demo->ot_error("Error Added!!!").'</br>';
-
-echo "Try Adding existing error ErrAdd('MyError','Description'";
-$demo->ErrAdd('MyError','Description');
-$demo->ot_error("Error Added!!!");
-
-echo "Showing all Errors  <br>";
-$demo->ot_show($demo->errtext);
-
-echo "Try Change unexisting error ErrChg('MyMistake','My Name')";
-$demo->ErrChg('MyMistake','My Name');
-$demo->ot_error("Error changed!!!");
-
-echo "Try Change existing error ErrChg('MyError','a New description'";
-$demo->ErrChg('MyError','a New description');
-$demo->ot_error("Error changed!!!").'</br>';
-
-echo "Showing all Errors  <br>";
-$demo->ot_show($demo->errtext);
-
-echo "Try delete unexisting error ->ErrDlt('MyMistake','My Name')";
-$demo->ErrDlt('MyMistake','My Name');
-$demo->ot_error("Error delete!!!");
-
-echo "Try delete existing error ->ErrDlt('MyError','a New description')";
-$demo->ErrDlt('MyError','a New description');
-$demo->ot_error("Error delete!!!");
-
-echo "Showing all Errors  <br>";
-$demo->ot_show($demo->errtext);
-
-echo "********** <br> User list Options <br> ********** <br> <br>";
-echo "On Line  <br>";
-$demo->ot_show($demo->UsrShwNln());
-
-echo "<br> All User  <br>";
+echo "**********+++++++++++ <br> User <br> **********+++++++++++ <br> <br>";
+echo "********** <br> Adding <br> **********+ <br> <br>";
+echo "CrtUsr('admin','xxx','active','name','active')";
+$demo->CrtUsr('admin','xxx','active','name','active');
+echo  "<br>";$demo->ot_error("Added!!!");echo "<br>";
+echo "CrtUsr('demo','12345','active','Demostration User','demo')";
+$demo->CrtUsr('demo','12345','active','Demostration User','demo');
+echo  "<br>";$demo->ot_error("Added!!!");echo "<br>";
+echo "CrtUsr('xdemo','23456','active','Another User','demo')";
+$demo->CrtUsr('xdemo','23456','active','Another User','demo');
+echo  "<br>";$demo->ot_error("Added!!!");echo "<br>";
+echo "CrtUsr('Demo','34567','active','Case Sensitive  User','demo')";
+$demo->CrtUsr('Demo','34567','active','Case Sensitive User','demo');
+echo  "<br>";$demo->ot_error("Added!!!");echo "<br>";
+echo "CrtUsr('last','45678','active','Last User','demo')";
+$demo->CrtUsr('last','45678','active','Last User','demo');
+echo  "<br>";$demo->ot_error("Added!!!");echo "<br>";
+echo "********** <br> Show All <br> **********+ <br> <br>";
 $demo->ot_show($demo->UsrShwAll());
-
-echo "********** <br> Feature list Options <br> ********** <br> <br>";
-echo "All  <br>";
+echo "********** <br> Deleting <br> **********+ <br> <br>";
+echo "UsrDlt('xadmin')";
+$demo->UsrDlt('xadmin');
+echo  "<br>";$demo->ot_error("Deleted!!!");echo "<br>";
+echo "UsrDlt('admin')";
+$demo->UsrDlt('admin');
+echo  "<br>";$demo->ot_error("Deleted!!!");echo "<br>";
+echo "UsrDlt('demo')";
+$demo->UsrDlt('demo');
+echo  "<br>";$demo->ot_error("Deleted!!!");echo "<br>";
+echo "********** <br> Show All <br> **********+ <br> <br>";
+$demo->ot_show($demo->UsrShwAll());
+echo "**********+++++++++++ <br> Change User<br> **********+++++++++++ <br> <br>";
+echo "DiscConnect()";
+$demo->DiscConnect();
+echo  "<br>";$demo->ot_error("Disconected!!!");echo "<br>";
+echo "Connect('xdemo','23456') ";
+$demo->Connect('xdemo','23456');
+echo  "<br>";$demo->ot_error("Conected!!!");echo "<br>";
+echo "**********+++++++++++ <br> User <br> **********+++++++++++ <br> <br>";
+echo "********** <br> Deleting <br> **********+ <br> <br>";
+echo "UsrDlt('Demo')";
+$demo->UsrDlt('Demo');
+echo  "<br>";$demo->ot_error("Conected!!!");echo "<br>";
+echo "**********+++++++++++ <br> Change User<br> **********+++++++++++ <br> <br>";
+echo "DiscConnect()";
+$demo->DiscConnect();
+echo  "<br>";$demo->ot_error("Disconected!!!");echo "<br>";
+echo "Connect('admin','OT2021Free') ";
+$demo->Connect('admin',$AdminPassword);
+echo  "<br>";$demo->ot_error("Conected!!!");echo "<br>";
+echo "**********+++++++++++ <br> User <br> **********+++++++++++ <br> <br>";
+echo "********** <br> Change <br> **********+ <br> <br>";
+echo "UsrChgInf('zdemo','His new name', 'None')";
+$demo->UsrChgInf('zdemo','His new name', 'None');
+echo  "<br>";$demo->ot_error("Changed!!!");echo "<br>";
+echo "UsrChgInf('xdemo','His new name', 'None')";
+$demo->UsrChgInf('xdemo','His new name', 'None');
+echo  "<br>";$demo->ot_error("Changed!!!");echo "<br>";
+echo "MyChgInf('Still the admin', 'Mario')";
+$demo->MyChgInf('Still the admin', 'Mario');
+echo  "<br>";$demo->ot_error("Changed!!!");echo "<br>";
+echo "********** <br> Show All <br> **********+ <br> <br>";
+$demo->ot_show($demo->UsrShwAll());
+echo "**********+++++++++++ <br> Password Check Options <br> **********+++++++++++ <br> <br>";
+echo "********** <br> Check <br> **********+ <br> <br>";
+echo "PssChk('none','His new name')";
+$demo->PssChk('none','His new name');
+echo  "<br>";$demo->ot_error("Correct!!!");echo "<br>";
+echo "PssChk('admin','fgkkjhkj')";
+$demo->PssChk('admin','fgkkjhkj');
+echo  "<br>";$demo->ot_error("Correct!!!");echo "<br>";
+echo "PssChk('admin','OT2021Free')";
+$demo->PssChk('admin','OT2021Free');
+echo  "<br>";$demo->ot_error("Correct!!!");echo "<br>";
+echo "PssChk('last','45678')";
+$demo->PssChk('last','45678');
+echo  "<br>";$demo->ot_error("Correct!!!");echo "<br>";
+echo "**********+++++++++++ <br> Status Options <br> **********+++++++++++ <br> <br>";
+echo "********** <br> Check status <br> **********+ <br> <br>";
+echo "UserChkStt('admin')";
+echo ': '.$demo->UserChkStt('admin');echo "<br>";
+echo "********** <br> Change status <br> **********+ <br> <br>";
+echo "UserChgStt('laxt','force')";
+$demo->UserChgStt('laxt','force');
+echo  "<br>";$demo->ot_error("Correct!!!");echo "<br>";
+echo "UserChgStt('last','forc')";
+$demo->UserChgStt('last','forc');
+echo  "<br>";$demo->ot_error("Correct!!!");echo "<br>";
+echo "UserChgStt('last','force')";
+$demo->UserChgStt('last','force');
+echo  "<br>";$demo->ot_error("Correct!!!");echo "<br>";
+echo "**********+++++++++++ <br> Change User<br> **********+++++++++++ <br> <br>";
+echo "DiscConnect()";
+$demo->DiscConnect();
+echo  "<br>";$demo->ot_error("Disconected!!!");echo "<br>";
+echo "Connect('last','45678') ";
+$demo->Connect('last','45678');
+echo  "<br>";$demo->ot_error("Conected!!!");echo "<br>";
+echo "**********+++++++++++ <br> Force Change Password  <br> **********+++++++++++ <br> <br>";
+echo "FrcPssChg('laxt','OT2021Free','87654')";
+$demo->FrcPssChg('admin',$AdminPassword,'87654');
+echo  "<br>";$demo->ot_error("Correct!!!");echo "<br>";
+echo "FrcPssChg('laxt','force')";
+$demo->FrcPssChg('laxt','45678','87654');
+echo  "<br>";$demo->ot_error("Correct!!!");echo "<br>";
+echo "FrcPssChg('last','5678','87654')";
+$demo->FrcPssChg('last','5678','87654');
+echo  "<br>";$demo->ot_error("Correct!!!");echo "<br>";
+echo "FrcPssChg('last','45678','87654')";
+$demo->FrcPssChg('last','45678','87654');
+echo  "<br>";$demo->ot_error("Correct!!!");echo "<br>";
+echo "**********+++++++++++ <br> Change User<br> **********+++++++++++ <br> <br>";
+echo "DiscConnect()";
+$demo->DiscConnect();
+echo  "<br>";$demo->ot_error("Disconected!!!");echo "<br>";
+echo "Connect('last','87654') ";
+$demo->Connect('last','87654');
+echo  "<br>";$demo->ot_error("Conected!!!");echo "<br>";
+echo "**********+++++++++++ <br> Change my Password  <br> **********+++++++++++ <br> <br>";
+echo "MyPssChg('admin','87654')";
+$demo->MyPssChg('admin','87654');
+echo  "<br>";$demo->ot_error("Correct!!!");echo "<br>";
+echo "MyPssChg('87654','none')";
+$demo->MyPssChg('87654','none');
+echo  "<br>";$demo->ot_error("Correct!!!");echo "<br>";
+echo "**********+++++++++++ <br> Change User<br> **********+++++++++++ <br> <br>";
+echo "DiscConnect()";
+$demo->DiscConnect();
+echo  "<br>";$demo->ot_error("Disconected!!!");echo "<br>";
+echo "Connect('admin','OT2021Free') ";
+$demo->Connect('admin','OT2021Free');
+echo  "<br>";$demo->ot_error("Conected!!!");echo "<br>";
+echo "**********+++++++++++ <br> Main Feature<br> **********+++++++++++ <br> <br>";
+echo "********** <br> Show User <br> **********+ <br> <br>";
+$demo->ot_show($demo->UsrShwMn());
+echo "********** <br> Add User <br> **********+ <br> <br>";
+echo "UsrAddMn('admin','none') ";
+$demo->UsrAddMn('admin','none');
+echo  "<br>";$demo->ot_error("Added!!!");echo "<br>";
+echo "UsrAddMn('admin','remove') ";
+$demo->UsrAddMn('admin','remove');
+echo  "<br>";$demo->ot_error("Added!!!");echo "<br>";
+echo "UsrAddMn('last','remove') ";
+$demo->UsrAddMn('last','remove');
+echo  "<br>";$demo->ot_error("Added!!!");echo "<br>";
+echo "UsrAddMn('Demo','remove') ";
+$demo->UsrAddMn('Demo','remove');
+echo  "<br>";$demo->ot_error("Added!!!");echo "<br>";
+echo "********** <br> Show User <br> **********+ <br> <br>";
+$demo->ot_show($demo->UsrShwMn());
+echo "********** <br> Change User Level<br> **********+ <br> <br>";
+echo "UsrChgMn('admin','remove') ";
+$demo->UsrChgMn('admin','remove');
+echo  "<br>";$demo->ot_error("changed!!!");echo "<br>";
+echo "UsrChgMn('xdemo','remove') ";
+$demo->UsrChgMn('xdemo','remove');
+echo  "<br>";$demo->ot_error("changed!!!");echo "<br>";
+echo "UsrChgMn('none','remove') ";
+$demo->UsrChgMn('none','remove');
+echo  "<br>";$demo->ot_error("changed!!!");echo "<br>";
+echo "UsrChgMn('last','none') ";
+$demo->UsrChgMn('last','none');
+echo  "<br>";$demo->ot_error("changed!!!");echo "<br>";
+echo "UsrChgMn('last','owner') ";
+$demo->UsrChgMn('last','owner');
+echo  "<br>";$demo->ot_error("changed!!!");echo "<br>";
+echo "********** <br> Show User <br> **********+ <br> <br>";
+$demo->ot_show($demo->UsrShwMn());
+echo "********** <br> Delete User Level<br> **********+ <br> <br>";
+echo "UsrDltMn('admin') ";
+$demo->UsrDltMn('admin');
+echo  "<br>";$demo->ot_error("delete!!!");echo "<br>";
+echo "UsrDltMn('none') ";
+$demo->UsrDltMn('none');
+echo  "<br>";$demo->ot_error("delete!!!");echo "<br>";
+echo "UsrDltMn('last') ";
+$demo->UsrDltMn('last');
+echo  "<br>";$demo->ot_error("delete!!!");echo "<br>";
+echo "********** <br> Show User <br> **********+ <br> <br>";
+$demo->ot_show($demo->UsrShwMn());
+echo "**********+++++++++++ <br> Other Feature<br> **********+++++++++++ <br> <br>";
+echo "********** <br> Show All <br> **********+ <br> <br>";
+echo "FrtShwAll() ";echo "<br>";
 $demo->ot_show($demo->FrtShwAll());
-
-
-echo "********** <br>  Feature Options <br> ********** <br> <br>";
-echo "Try add user to main feature  UsrAddMn('Demo', 3)";
-$demo->UsrAddMn('Demo', 3);
-$demo->ot_error("User added!!!").'<br>';
-echo "Try add user to main feature  UsrAddMn('Demo', 3)";
-$demo->UsrAddMn('Demo', 3);
-$demo->ot_error("User added!!!").'<br>';
-$demo->UsrAddMn('Demo1', 0);
-$demo->UsrAddMn('Demo2', 1);
-$demo->UsrAddMn('Demo3', 2);
-echo "Try add user to a feature  UsrAddFtr('usr'.'Demo', 1)";
-$demo->UsrAddFtr('usr','Demo', 1);
-$demo->ot_error("User added!!!").'<br>';
-$demo->UsrAddFtr('usr','Demo1', 1);
-echo "show main feature users ->ShwMn()".'<br>';
-$demo->ot_show($demo->UsrShwMn()).'<br>';
-echo "show features of an user UsrShwFtr('Demo')".'<br>';
-$demo->ot_show($demo->UsrShwFtr('Demo')).'<br>';
-echo "show users of an feature FtrShwUsr('usr')".'<br>';
-$demo->ot_show($demo->FtrShwUsr('usr')).'<br>';
-echo "Try change user level user to main feature  UsrAddMn('Demo', 4)";
-$demo->UsrChgMn('Demo', 4).'<br>';
-$demo->ot_error("level change!!!").'<br>';
-echo "Try change user level to a feature  UsrAddFtr('usr'.'Demo', 4)";
-$demo->UsrChgFtr('usr','Demo', 4).'<br>';
-$demo->ot_error("level change!!!").'<br>';
-echo "show main feature users ->ShwMn()".'<br>';
-$demo->ot_show($demo->UsrShwMn()).'<br>';
-echo "show features of an user UsrShwFtr('Demo')".'<br>';
-$demo->ot_show($demo->UsrShwFtr('Demo')).'<br>';
-echo "show users of an feature FtrShwUsr('usr')".'<br>';
-$demo->ot_show($demo->FtrShwUsr('usr')).'<br>';
-echo "Try change user level user to main feature  UsrAddMn('Demo')";
-$demo->UsrDltMn('Demo').'<br>';
-$demo->ot_error("level change!!!").'<br>';
-echo "Try change user level to a feature  UsrAddFtr('usr'.'Demo')";
-$demo->UsrDltFtr('usr','Demo').'<br>';
-$demo->ot_error("level change!!!").'<br>';
-echo "show main feature users ->ShwMn()".'<br>';
-$demo->ot_show($demo->UsrShwMn()).'<br>';
-echo "show features of an user UsrShwFtr('Demo')".'<br>';
-$demo->ot_show($demo->UsrShwFtr('Demo')).'<br>';
-echo "show users of an feature FtrShwUsr('usr')".'<br>';
-$demo->ot_show($demo->FtrShwUsr('usr')).'<br>';
-
-echo "<br><br><br><br>********** <br> Features Info<br> ********** <br> <br>";
-echo "show private information of an feature FtrShwPrv('usr')".'<br>';
-$demo->ot_show($demo->FtrShwPrv('usr')).'<br>';
-echo "Add private information of an feature FtrAddPrv('usr','administratos','me')".'<br>';
-$demo->FtrAddPrv('usr','administratos','me');
-$demo->ot_error("Added!!!").'<br>';
-echo "Add private information of an feature FtrAddPrv('usr','wha','today')".'<br>';
-$demo->FtrAddPrv('usr','when','today');
-$demo->ot_error("Added!!!").'<br>';
-echo "Add private information of an feature FtrAddPrv('usr','where','here')".'<br>';
-$demo->FtrAddPrv('usr','where','here');
-$demo->ot_error("Added!!!").'<br>';
-echo "show private information of an feature FtrShwPrv('usr')".'<br>';
-$demo->ot_show($demo->FtrShwPrv('usr')).'<br>';
-echo "Change private information of an feature FtrChgPrv('usr','where','here')".'<br>';
-$demo->FtrChgPrv('usr','where','any place');
-$demo->ot_error("Changed!!!").'<br>';
-echo "show private information of an feature FtrShwPrv('usr')".'<br>';
-$demo->ot_show($demo->FtrShwPrv('usr')).'<br>';
-echo "Delete private information of an feature FtrDltPrv('usr','where')".'<br>';
-$demo->FtrDltPrv('usr','where');
-echo "Delete private information of an feature FtrDltPrv('usr','administratos')".'<br>';
-$demo->FtrDltPrv('usr','administratos');
-echo "show private information of an feature FtrShwPrv('usr')".'<br>';
-$demo->ot_show($demo->FtrShwPrv('usr')).'<br>';
-
-echo "show public information of an feature FtrShwPbl('usr')".'<br>';
-$demo->ot_show($demo->FtrShwPbl('usr')).'<br>';
-
-
-echo "Add public information of an feature FtrAddPbl('usr','admin','me')".'<br>';
-$demo->FtrAddPbl('usr','admin','me');
-$demo->ot_error("Added!!!").'<br>';
-echo "Add public information of an feature FtrAddPbl('usr','when','yesterday')".'<br>';
-$demo->FtrAddPbl('usr','when','yesterday');
-$demo->ot_error("Added!!!").'<br>';
-echo "Add public information of an feature FtrAddPbl('usr','what','no idea')".'<br>';
-$demo->FtrAddPbl('usr','what','no idea');
-$demo->ot_error("Added!!!").'<br>';
-echo "show public information of an feature FtrShwPbl('usr')".'<br>';
-$demo->ot_show($demo->FtrShwPbl('usr')).'<br>';
-echo "Change public information of an feature FtrChgPbl('usr','what','here')".'<br>';
-$demo->FtrChgPbl('usr','what','any place');
-$demo->ot_error("Changed!!!").'<br>';
-echo "show public information of an feature FtrShwPbl('usr')".'<br>';
-$demo->ot_show($demo->FtrShwPbl('usr')).'<br>';
-echo "Delete public information of an feature FtrDltPbl('usr','what')".'<br>';
-$demo->FtrDltPbl('usr','what');
-echo "Delete public information of an feature FtrDltPbl('usr','admin')".'<br>';
-$demo->FtrDltPbl('usr','admin');
-echo "show public information of an feature FtrShwPbl('usr')".'<br>';
-$demo->ot_show($demo->FtrShwPbl('usr')).'<br>';
-
-
-
-
-echo "<br><br><br><br>********** <br> Deleting Record<br> ********** <br> <br>";
-
-echo "DiscConnect(): ";
-$demo->DiscConnect();$demo->ot_error(" Disconected!");
-
-
-echo "Try conect with correct info ->Connect('admin','OT2021Free'): ";$demo->Connect('admin','OT2021Free');$demo->ot_error("Connent!!!");
-
-echo "Deleting ->UserDlt('Demo'): ";$demo->UserDlt('Demo');$demo->ot_error("Deleted!!!");
-echo "Deleting ->UserDlt('Demo1'): ";$demo->UserDlt('Demo1');$demo->ot_error("Deleted!!!");
-echo "Deleting ->UserDlt('Demo2'): ";$demo->UserDlt('Demo2');$demo->ot_error("Deleted!!!");
-echo "Deleting ->UserDlt('Demo3'): ";$demo->UserDlt('Demo3');$demo->ot_error("Deleted!!!");
-echo "Deleting ->UserDlt('Demo4'): ";$demo->UserDlt('Demo4');$demo->ot_error("Deleted!!!");
-
-echo 'Demo Finish';
+echo "********** <br> Show User Feature <br> **********+ <br> <br>";
+echo "UsrShwFtr('admin') ";echo "<br>";
+$demo->ot_show($demo->UsrShwFtr('admin'));
+echo "********** <br> Show Feature User <br> **********+ <br> <br>";
+echo "FtrShwUsr('usr') ";echo "<br>";
+$demo->ot_show($demo->FtrShwUsr('usr'));
+echo "********** <br> Add User <br> **********+ <br> <br>";
+echo "UsrAddFtr('usrx','xlast','xcreate') ";
+$demo->UsrAddFtr('usrx','xlast','xcreate');
+echo  "<br>";$demo->ot_error("Added!!!");echo "<br>";
+echo "UsrAddFtr('usr','xlast','xcreate') ";
+$demo->UsrAddFtr('usr','xlast','xcreate');
+echo  "<br>";$demo->ot_error("Added!!!");echo "<br>";
+echo "UsrAddFtr('usr','last','xcreate') ";
+$demo->UsrAddFtr('usr','last','xcreate');
+echo  "<br>";$demo->ot_error("Added!!!");echo "<br>";
+echo "UsrAddFtr('usr','last','create') ";
+$demo->UsrAddFtr('usr','last','create');
+echo  "<br>";$demo->ot_error("Added!!!");echo "<br>";
+echo "********** <br> Change User <br> **********+ <br> <br>";
+echo "UsrChgFtr('usrx','xlast','xcreate') ";
+$demo->UsrChgFtr('usrx','xlast','xcreate');
+echo  "<br>";$demo->ot_error("Changed!!!");echo "<br>";
+echo "UsrChgFtr('usr','xlast','xcreate') ";
+$demo->UsrChgFtr('usr','xlast','xcreate');
+echo  "<br>";$demo->ot_error("Changed!!!");echo "<br>";
+echo "UsrChgFtr('usr','last','xcreate') ";
+$demo->UsrChgFtr('usr','last','xcreate');
+echo  "<br>";$demo->ot_error("Changed!!!");echo "<br>";
+echo "UsrChgFtr('usr','last','xcreate') ";
+$demo->UsrChgFtr('usr','admim','create');
+echo  "<br>";$demo->ot_error("Changed!!!");echo "<br>";
+echo "UsrChgFtr('usr','last','remove') ";
+$demo->UsrChgFtr('usr','last','remove');
+echo  "<br>";$demo->ot_error("Changed!!!");echo "<br>";
+echo "********** <br> Delete User <br> **********+ <br> <br>";
+echo "UsrDltFtr('usr','admim') ";
+$demo->UsrDltFtr('usr','admim');
+echo  "<br>";$demo->ot_error("Deleted!!!");echo "<br>";
+echo "UsrDltFtr('usrx','xlast') ";
+$demo->UsrDltFtr('usrx','xlast');
+echo  "<br>";$demo->ot_error("Deleted!!!");echo "<br>";
+echo "UsrDltFtr('usr','xlast') ";
+$demo->UsrDltFtr('usr','xlast');
+echo  "<br>";$demo->ot_error("Deleted!!!");echo "<br>";
+echo "UsrDltFtr('usr','last') ";
+$demo->UsrDltFtr('usr','last');
+echo  "<br>";$demo->ot_error("Deleted!!!");echo "<br>";
+echo "**********+++++++++++ <br> Errors <br> **********+++++++++++ <br> <br>";
+echo "********** <br> Adding <br> **********+ <br> <br>";
+echo "ErrAdd('C0010M012','Description') ";
+$demo->ErrAdd('C0010M012','Description');
+echo  "<br>";$demo->ot_error("Added!!!");echo "<br>";
+echo "ErrAdd('C0010M012','Description') ";
+$demo->ErrAdd('sample','sample error');
+echo  "<br>";$demo->ot_error("Added!!!");echo "<br>";
+echo "********** <br> Show Errors<br> ********** <br> <br>";
+$demo->ot_show($demo->errtext);
+echo "********** <br> Change <br> **********+ <br> <br>";
+echo "ErrChg('none','Description') ";
+$demo->ErrChg('none','Description');
+echo  "<br>";$demo->ot_error("change!!!");echo "<br>";
+echo "ErrChg('sample','Description') ";
+$demo->ErrChg('sample','New description');
+echo  "<br>";$demo->ot_error("change!!!");echo "<br>";
+echo "********** <br> Show Errors<br> ********** <br> <br>";
+$demo->ot_show($demo->errtext);
+echo "ErrDlt('none','Description') ";
+$demo->ErrDlt('none','Description');
+echo  "<br>";$demo->ot_error("change!!!");echo "<br>";
+echo "ErrDlt('sample','Description') ";
+$demo->ErrDlt('sample','New description');
+echo  "<br>";$demo->ot_error("change!!!");echo "<br>";
+echo "********** <br> Show Errors<br> ********** <br> <br>";
+$demo->ot_show($demo->errtext);
+echo "**********+++++++++++ <br> Public & Private Info <br> **********+++++++++++ <br> <br>";
+echo "********** <br> Public in user add <br> **********+ <br> <br>";
+echo "MyAddPbl('wife','Beatriz')";
+$demo->MyAddPbl('wife','Beatriz');
+echo  "<br>";$demo->ot_error("Added!!!");echo "<br>";
+echo "MyAddPbl('mascot','dog')";
+$demo->MyAddPbl('mascot','dog');
+echo  "<br>";$demo->ot_error("Added!!!");echo "<br>";
+echo "MyAddPbl('name','Boby')";
+$demo->MyAddPbl('name','Boby');
+echo  "<br>";$demo->ot_error("Added!!!");echo "<br>";
+echo "MyAddPbl('bio','in the example y usually write short related information, but is just that a little example, could be so long as you need, feel free to do ur own test, look that i just write all this text to have more than one line ')";
+$demo->MyAddPbl('bio','in the example y usually write short related information, but is just that a little example, could be so long as you need, feel free to do ur own test, look that i just write all this text to have more than one line ');
+echo  "<br>";$demo->ot_error("Added!!!");echo "<br>";
+echo "********** <br> Show Public information of currente user<br> ********** <br> <br>";
+$demo->ot_show($demo->user);
+echo "********** <br> Public in user change <br> **********+ <br> <br>";
+echo "MyChgPbl('son','Axel')";
+$demo->MyChgPbl('son','Axel');
+echo  "<br>";$demo->ot_error("Changed!!!");echo "<br>";
+echo "MyChgPbl('name','Robert')";
+$demo->MyChgPbl('name','Robert');
+echo  "<br>";$demo->ot_error("Changed!!!");echo "<br>";
+echo "********** <br> Show Public information of currente user<br> ********** <br> <br>";
+$demo->ot_show($demo->user);
+echo "********** <br> Public in user delete <br> **********+ <br> <br>";
+echo "MyDltPbl('son')";
+$demo->MyDltPbl('son');
+echo  "<br>";$demo->ot_error("Changed!!!");echo "<br>";
+echo "MyDltPbl('bio')";
+$demo->MyDltPbl('bio');
+echo  "<br>";$demo->ot_error("Changed!!!");echo "<br>";
+echo "********** <br> Show Private information of currente user<br> ********** <br> <br>";
+$demo->ot_show($demo->user);
+echo "********** <br> Private in user add <br> **********+ <br> <br>";
+echo "MyAddPrv('son','Axel')";
+$demo->MyAddPrv('son','Axel');
+echo  "<br>";$demo->ot_error("Added!!!");echo "<br>";
+echo "MyAddPrv('phone','i don't have)";
+$demo->MyAddPrv('phone','i dont have');
+echo  "<br>";$demo->ot_error("Added!!!");echo "<br>";
+echo "MyAddPrv('Color','Red')";
+$demo->MyAddPrv('Color','Red');
+echo  "<br>";$demo->ot_error("Added!!!");echo "<br>";
+echo "MyAddPrv('bio','in the example y usually write short related information, but is just that a little example, could be so long as you need, feel free to do ur own test, look that i just write all this text to have more than one line, in private ')";
+$demo->MyAddPrv('bio','in the example y usually write short related information, but is just that a little example, could be so long as you need, feel free to do ur own test, look that i just write all this text to have more than one line, in private ');
+echo  "<br>";$demo->ot_error("Added!!!");echo "<br>";
+echo "********** <br> Show Private information of currente user<br> ********** <br> <br>";
+$demo->ot_show($demo->userp);
+echo "********** <br> Private in user change <br> **********+ <br> <br>";
+echo "MyChgPrv('Daugther','Axel')";
+$demo->MyChgPrv('Daugther','Axel');
+echo  "<br>";$demo->ot_error("Added!!!");echo "<br>";
+echo "MyAddPbl('Color','Blue')";
+$demo->MyAddPbl('Color','Blue');
+echo  "<br>";$demo->ot_error("Added!!!");echo "<br>";
+echo "********** <br> Show Private information of currente user<br> ********** <br> <br>";
+$demo->ot_show($demo->userp);
+echo "********** <br> Private in user delete <br> **********+ <br> <br>";
+echo "MyDltPrv('Daugther')";
+$demo->MyDltPrv('Daugther');
+echo  "<br>";$demo->ot_error("Added!!!");echo "<br>";
+echo "MyDltPrv('son')";
+$demo->MyDltPrv('son');
+echo  "<br>";$demo->ot_error("Added!!!");echo "<br>";
+echo "********** <br> Show Private information of currente user<br> ********** <br> <br>";
+$demo->ot_show($demo->userp);
+echo "********** <br> Show public information of especific user<br> ********** <br> <br>";
+echo "UserShwPbl('admin')";
+$demo->ot_show($demo->UserShwPbl('admin'));
+echo "********** <br> Private in Feature add <br> **********+ <br> <br>";
+echo "FtrAddPrv('usr','Contact','Can find me in ext 1234')";
+$demo->FtrAddPrv('usr','Contact','Can find me in ext 1234');
+echo  "<br>";$demo->ot_error("Added!!!");echo "<br>";
+echo "FtrAddPrv('usr','help','Call eze at any time')";
+$demo->FtrAddPrv('usr','help','Call eze at any time');
+echo  "<br>";$demo->ot_error("Added!!!");echo "<br>";
+echo "FtrAddPrv('usr','sample','I will delete this line')";
+$demo->FtrAddPrv('usr','sample','I will delete this line');
+echo  "<br>";$demo->ot_error("Added!!!");echo "<br>";
+echo "********** <br> Show private information of especific user<br> ********** <br> <br>";
+echo "FtrShwPrv('usr')";echo "<br>";
+$demo->ot_show($demo->FtrShwPrv('usr'));echo "<br>";
+echo "********** <br> Private in Feature change <br> **********+ <br> <br>";
+echo "FtrChgPrv('usr','Contact','Dont worry not change')";
+$demo->FtrChgPrv('ur','Contact','Dont worry not change');
+echo  "<br>";$demo->ot_error("Changed!!!");echo "<br>";
+echo "FtrChgPrv('usr','help','Call Eze at any time, must be capital')";
+$demo->FtrChgPrv('usr','help','Call Eze at any time, must be capital');
+echo  "<br>";$demo->ot_error("Added!!!");echo "<br>";
+echo "********** <br> Show private information of especific user<br> ********** <br> <br>";
+echo "FtrShwPrv('usr')";echo "<br>";
+$demo->ot_show($demo->FtrShwPrv('usr'));echo "<br>";
+echo "********** <br> Private in Deleted delete <br> **********+ <br> <br>";
+echo "FtrDltPrv('usr','Contact')";
+$demo->FtrDltPrv('ur','Contact');
+echo  "<br>";$demo->ot_error("Deleted!!!");echo "<br>";
+echo "FtrDltPrv('usr','sample')";
+$demo->FtrDltPrv('usr','sample');
+echo  "<br>";$demo->ot_error("Deleted!!!");echo "<br>";
+echo "********** <br> Show private information of especific user<br> ********** <br> <br>";
+echo "FtrShwPrv('usr')";echo "<br>";
+$demo->ot_show($demo->FtrShwPrv('usr'));echo "<br>";
+echo "********** <br> Public in Feature add <br> **********+ <br> <br>";
+echo "FtrAddPbl('usr','Contact','To get access to users send me a mail')";
+$demo->FtrAddPbl('usr','Contact','To get access to users send me a mail');
+echo  "<br>";$demo->ot_error("Added!!!");echo "<br>";
+echo "FtrAddPbl('usr','tall','a litle more than the average')";
+$demo->FtrAddPbl('usr','tall','a litle more than the average');
+echo  "<br>";$demo->ot_error("Added!!!");echo "<br>";
+echo "FtrAddPbl('usr','sample','I will delete this line, yes this one too')";
+$demo->FtrAddPbl('usr','sample','I will delete this line, yes this one too');
+echo  "<br>";$demo->ot_error("Added!!!");echo "<br>";
+echo "********** <br> Show public information of especific user<br> ********** <br> <br>";
+echo "FtrShwPbl('usr')";echo "<br>";
+$demo->ot_show($demo->FtrShwPbl('usr'));echo "<br>";
+echo "********** <br> Public in Feature change <br> **********+ <br> <br>";
+echo "FtrChgPbl('usr','tall','change mu mind, this is selected')";
+$demo->FtrChgPbl('usr','tall','change mu mind, this is selected');
+echo  "<br>";$demo->ot_error("Changed!!!");echo "<br>";
+echo "FtrChgPbl('usr','samplx','I will delete this line, yes this one too')";
+$demo->FtrChgPbl('usr','samplx','I will delete this line, yes this one too');
+echo  "<br>";$demo->ot_error("Changed!!!");echo "<br>";
+echo "********** <br> Show public information of especific user<br> ********** <br> <br>";
+echo "FtrShwPbl('usr')";echo "<br>";
+$demo->ot_show($demo->FtrShwPbl('usr'));echo "<br>";
+echo "********** <br> Public in Feature delete <br> **********+ <br> <br>";
+echo "FtrDltPbl('usr','tal','change mu mind, this is selected')";
+$demo->FtrDltPbl('usr','tal','change mu mind, this is selected');
+echo  "<br>";$demo->ot_error("Deleted!!!");echo "<br>";
+echo "FtrDltPbl('usr','sample','I will delete this line, yes this one too')";
+$demo->FtrDltPbl('usr','sample','I will delete this line, yes this one too');
+echo  "<br>";$demo->ot_error("Deleted!!!");echo "<br>";
+echo "********** <br> Show public information of especific user<br> ********** <br> <br>";
+echo "FtrShwPbl('usr')";echo "<br>";
+$demo->ot_show($demo->FtrShwPbl('usr'));echo "<br>";
+echo "**********+++++++++++ <br> User on line<br> **********+++++++++++ <br> <br>";
+echo "********** <br> Show All <br> **********+ <br> <br>";
+echo "UsrShwNln() ";echo "<br>";
+$demo->ot_show($demo->UsrShwNln());
+echo "********** <br> Deleting demo user <br> **********+ <br> <br>";
+$demo->UsrDlt('Demo');
+echo  "<br>";$demo->ot_error("Deleted!!!");echo "<br>";
+$demo->UsrDlt('last');
+echo  "<br>";$demo->ot_error("Deleted!!!");echo "<br>";
+$demo->UsrDlt('xdemo');
+echo  "<br>";$demo->ot_error("Deleted!!!");echo "<br>";
+echo "**********+++++++++++ <br> Demo Finish<br> **********+++++++++++ <br> <br>";
 ?>

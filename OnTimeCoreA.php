@@ -1,24 +1,11 @@
 <?php
-trait CoreA{
-
-	function UserAdd($key, $password, $status, $fullname='None', $Nick='None')
-	{
+trait CoreA{	
+	function CrtUsr($key, $password, $status, $fullname='None', $Nick='None'){
 		if ($this->ot_connect()) {
-			if ($this->ot_can(1,'usr')) {
+			if ($this->ot_can('create','usr')) {
 				if ($this->not_exist($key, 'usr')) {
 					if ($this->ot_create($key, 'usr')) {
-						$tmparray=[];
-						$tmparray['password']=MD5($password);
-						$tmparray['status']=$status;
-						$tmparray['nick']=$Nick;
-						$tmparray['name']=$fullname;
-						$tmparray['crtusr']=$this->id;
-						$tmparray['crtdat']=$this->ot_now();
-						$tmparray['owner']=$this->id;
-						$tmparray['conected']=FALSE;
-						$tmparray['lstcnc']='';
-						$tmparray['lstdcn']='';
-						$this->ot_write('admin.json',$tmparray,'usr/'.$key);	
+						$this->ot_array(array('password'=>MD5($password),'status'=>$status,'nick'=>$Nick,'name'=>$fullname,'crtdat'=>$this->ot_now()), 'admin.json', TRUE,'usr/'.$key);
 					}
 				}
 			}
@@ -26,258 +13,217 @@ trait CoreA{
 		$this->ot_log( __METHOD__ , __FUNCTION__ , func_get_args() , $this->retval );
 		return $this->retval;
 	}
-	
-
-	function UserDlt($User)
-	{
-		if ($this->ot_can(0,'usr')) {
-			if ($this->not_value($User,'main',"C0010M026")) {
-				if ($this->ot_exist($User,'usr')) {
-					$atmp=$this->ot_readif('features.json','usr/'.$User);
-					foreach ($atmp as $iKey=> $iValue) {
-						$this->ot_deletein($User, 'users.json',$iKey);
-					}
-					$atmp=$this->ot_readif('groups.json','usr/'.$User);
-					foreach ($atmp as $iKey=> $iValue) {
-						$this->ot_deletein($User, 'users.json','grp/'.$iKey);
-					}
-					$this->ot_related($User);					
-					$this->ot_remove($User, 'usr');
+	function UsrChgInf($user,$name, $nick){
+		if ($this->ot_connect()) {
+			if ($this->ot_can('change','usr')) {
+				if ($this->ot_exist($user,'usr')) {
+					$atmp=$this->ot_readif('admin.json','usr/'.$user);
+					$atmp['name']=$name;
+					$atmp['nick']=$nick;
+					$this->ot_write('admin.json',$atmp,'usr/'.$user);
+					$this->retval=TRUE;
 				}
 			}
 		}
+		$this->ot_log( __METHOD__ , __FUNCTION__ , func_get_args() , $this->retval );
 		return $this->retval;
 	}	
-
-	function UserChkStt($key)
-	{
-		$atmp=' ';
+	function UserChkStt($key){
+		$atmp['status']=' ';
 		if ($this->ot_connect()) {
-			if ($this->ot_can(1,'usr'))
+			if ($this->ot_can('change','usr')){
 				if ($this->ot_exist($key, 'usr')) {
-				$atmp=$this->ot_readif('admin.json','usr/'.$key);
-				return($atmp['status']);
+					$atmp=$this->ot_readif('admin.json','usr/'.$key);
+					return($atmp['status']);
+				}
 			}
 		}
-		$this->ot_log( __METHOD__ , __FUNCTION__ , func_get_args() , $atmp );
-		return $atmp;
-	}
-
-	function UserChgStt($key,$Value)
-	{
-		if ($this->ot_connect())
-			if ($this->ot_can(1,'usr'))
-		if ($this->ot_exist($key, 'usr')) {
-			$atmp=$this->ot_readif('admin.json','usr/'.$key);
-			$atmp['status'] = $Value;
-			$this->ot_write('admin.json',$atmp,'usr/'.$key);
+		$this->ot_log( __METHOD__ , __FUNCTION__ , func_get_args() , $atmp['status'] );
+		return $atmp['status'];
+	}	
+	function UserChgStt($user,$Value){
+		if ($this->ot_connect()){
+			if ($this->ot_can('change','usr')){
+				if ($this->ot_exist($user, 'usr')) {
+					if ($this->ot_in($Value,$this->status)) {
+						$atmp=$this->ot_changein('status',$Value,'admin.json','usr/'.$user);
+					}
+				}
+			}
 		}
 		$this->ot_log( __METHOD__ , __FUNCTION__ , func_get_args() , $this->retval );
 		return $this->retval;
 	}
-	
-	function ErrAdd($key, $value)
-	{
-		if ($this->ot_can(1,'main'))
+	function ErrAdd($key, $value){
+		if ($this->ot_can('create','main')){
 			$this->errtext=$this->ot_add($key,$value,$this->errtext,'error.json');
-		$this->ot_log( __METHOD__ , __FUNCTION__ , func_get_args() , $this->retval );
-		return $this->retval;
-	}
-
-	function ErrChg($key, $value)
-	{
-		if ($this->ot_can(2,'main'))
-			$this->errtext=$this->ot_change($key,$value,$this->errtext,'error.json');
-		$this->ot_log( __METHOD__ , __FUNCTION__ , func_get_args() , $this->retval );
-		return $this->retval;
-	}
-
-	function ErrDlt($key)
-	{
-		if ($this->ot_can(0,'main'))
-			$this->errtext=$this->ot_delete($key,$this->errtext,'error.json');
-		$this->ot_log( __METHOD__ , __FUNCTION__ , func_get_args() , $this->retval );
-		return $this->retval;
-	}
-	
-	function UsrShwMn()
-	{
-		$atmp = [];
-		if ($this->ot_can(2,'main')) {
-			$atmp=$this->ot_readif('users.json');
 		}
-		$this->ot_log( __METHOD__ , __FUNCTION__ , func_get_args() , $atmp );
-		return $atmp;
+		$this->ot_log( __METHOD__ , __FUNCTION__ , func_get_args() , $this->retval );
+		return $this->retval;
+	}	
+	function ErrChg($key, $value){
+		if ($this->ot_can('change','main')){
+			$this->errtext=$this->ot_change($key,$value,$this->errtext,'error.json');
+		}
+		$this->ot_log( __METHOD__ , __FUNCTION__ , func_get_args() , $this->retval );
+		return $this->retval;
+	}	
+	function ErrDlt($key){
+		if ($this->ot_can('remove','main')){
+			$this->errtext=$this->ot_delete($key,$this->errtext,'error.json');
+		}
+		$this->ot_log( __METHOD__ , __FUNCTION__ , func_get_args() , $this->retval );
+		return $this->retval;
 	}
-	
-	function UsrShwFtr($User)
-	{
+	function UsrAddMn($User, $level){
+		if ($this->ot_can('create','main')) {
+			if ($this->ot_exist($User,'usr')) {
+				if ($this->ot_in($level,$this->level)) {
+					$this->ot_addin('main',$level,'features.json','usr/'.$User);
+					$this->ot_addin($User,$level,'users.json');
+				}
+			}
+		}
+		$this->ot_log( __METHOD__ , __FUNCTION__ , func_get_args() , $this->retval );
+		return $this->retval;
+	}
+	function UsrChgMn($User, $level){
+		if ($this->ot_can('change','main')) {
+			if ($this->ot_exist($User,'usr')) {
+				if ($this->ot_in($level,$this->level)) {
+					if ($this->not_value($User,'admin','C0010M036')) {				
+						$this->ot_changein('main',$level,'features.json','usr/'.$User);
+						$this->ot_changein($User,$level,'users.json');
+					}
+				}
+			}
+		}
+		$this->ot_log( __METHOD__ , __FUNCTION__ , func_get_args() , $this->retval );
+		return $this->retval;
+	}	
+	function UsrDltMn($User){
+		if ($this->ot_can('remove','main')) {
+			if ($this->ot_exist($User,'usr')) {
+				if ($this->not_value($User,'admin','C0010M036')) {				
+					$this->ot_deletein('main','features.json','usr/'.$User);
+					$this->ot_deletein($User,'users.json');
+				}
+			}
+		}
+		$this->ot_log( __METHOD__ , __FUNCTION__ , func_get_args() , $this->retval );
+		return $this->retval;
+	}	
+	function UsrShwFtr($User){
 		$atmp = [];
-		if ($this->ot_can(2,'main')) {
+		if ($this->ot_can('access','main')) {
 			if ($this->ot_exist($User,'usr')) {
 				$atmp=$this->ot_readif('features.json','usr/'.$User);
 			}
 		}
 		$this->ot_log( __METHOD__ , __FUNCTION__ , func_get_args() , $atmp );
 		return $atmp;
-	}
-
-	function FtrShwUsr($Feature)
-	{
+	}	
+	function FtrShwUsr($Feature){
 		$atmp = [];
-		if ($this->ot_can(2,'main')) {
+		if ($this->ot_can('access','main')) {
 			if ($this->ot_exist($Feature)) {
 				$atmp=$this->ot_readif('users.json',$Feature);
 			}
 		}
 		$this->ot_log( __METHOD__ , __FUNCTION__ , func_get_args() , $atmp );
 		return $atmp;
-	}
-
-	function UsrAddMn($User, $level)
-	{
-		if ($this->ot_can(2,'main')) {
-			if ($this->ot_exist($User,'usr')) {
-				$atmp=$this->ot_readif('features.json','usr/'.$User);
-				$this->ot_add('main',$level,$atmp,'features.json','usr/'.$User);
-				$atmp=$this->ot_readif('users.json');
-				$this->ot_add($User,$level,$atmp,'users.json');
-			}
-		}
-		$this->ot_log( __METHOD__ , __FUNCTION__ , func_get_args() , $this->retval );
-		return $this->retval;
-	}
-	
-	function UsrAddFtr($Feature, $User, $level)
-	{
-		if ($this->ot_can(0,$Feature)) {
+	}	
+	function UsrAddFtr($Feature, $User, $level){
+		if ($this->ot_can('create',$Feature)) {
 			if ($this->ot_exist($User,'usr')) {
 				if ($this->ot_exist($Feature)) {
-					$atmp=$this->ot_readif('features.json','usr/'.$User);
-					$this->ot_add($Feature,$level,$atmp,'features.json','usr/'.$User);								$atmp=$this->ot_readif('users.json',$Feature);
-					$this->ot_add($User,$level,$atmp,'users.json',$Feature);
+					if ($this->ot_in($level,$this->level)) {
+						$this->ot_addin($Feature,$level,'features.json','usr/'.$User);								$this->ot_addin($User,$level,'users.json',$Feature);	
+					}
 				}
 			}
 		}
 		$this->ot_log( __METHOD__ , __FUNCTION__ , func_get_args() , $this->retval );
 		return $this->retval;
 	}
-	function UsrChgMn($User, $level)
-	{
-		if ($this->ot_can(2,'main')) {
-			if ($this->ot_exist($User,'usr')) {
-				$atmp=$this->ot_readif('features.json','usr/'.$User);
-				$this->ot_change('main',$level,$atmp,'features.json','usr/'.$User);
-				$atmp=$this->ot_readif('users.json');
-				$this->ot_change($User,$level,$atmp,'users.json');
-			}
-		}
-		$this->ot_log( __METHOD__ , __FUNCTION__ , func_get_args() , $this->retval );
-		return $this->retval;
-	}
-
-	function UsrChgFtr($Feature, $User, $level)
-	{
-		if ($this->ot_can(0,$Feature)) {
+	function UsrChgFtr($Feature, $User, $level){
+		if ($this->ot_can('change',$Feature)) {
 			if ($this->ot_exist($User,'usr')) {
 				if ($this->ot_exist($Feature)) {
-					$atmp=$this->ot_readif('features.json','usr/'.$User);
-					$this->ot_change($Feature,$level,$atmp,'features.json','usr/'.$User);							$atmp=$this->ot_readif('users.json',$Feature);
-					$this->ot_change($User,$level,$atmp,'users.json',$Feature);
+					if ($this->ot_in($level,$this->level)) {
+						if ($this->not_value($User,'admin','C0010M036')) {				
+							$this->ot_changein($Feature,$level,'features.json','usr/'.$User);		
+							$this->ot_changein($User,$level,'users.json',$Feature);
+						}
+					}
 				}
 			}
 		}
 		$this->ot_log( __METHOD__ , __FUNCTION__ , func_get_args() , $this->retval );
 		return $this->retval;
 	}
-	function UsrDltMn($User)
-	{
-		if ($this->ot_can(2,'main')) {
-			if ($this->ot_exist($User,'usr')) {
-				$atmp=$this->ot_readif('features.json','usr/'.$User);
-				$this->ot_delete('main',$atmp,'features.json','usr/'.$User);
-				$atmp=$this->ot_readif('users.json');
-				$this->ot_delete($User,$atmp,'users.json');
-			}
-		}
-		$this->ot_log( __METHOD__ , __FUNCTION__ , func_get_args() , $this->retval );
-		return $this->retval;
-	}
-
-	function UsrDltFtr($Feature, $User)
-	{
-		if ($this->ot_can(0,$Feature)) {
+	function UsrDltFtr($Feature, $User){
+		if ($this->ot_can('remove',$Feature)) {
 			if ($this->ot_exist($User,'usr')) {
 				if ($this->ot_exist($Feature)) {
-					$atmp=$this->ot_readif('features.json','usr/'.$User);
-					$this->ot_delete($Feature,$atmp,'features.json','usr/'.$User);							$atmp=$this->ot_readif('users.json',$Feature);
-					$this->ot_delete($User,$atmp,'users.json',$Feature);
+					if ($this->not_value($User,'admin','C0010M036')) {				
+						$this->ot_deletein($Feature,'features.json','usr/'.$User);		
+						$this->ot_deletein($User,'users.json',$Feature);
+					}
 				}
 			}
 		}
 		$this->ot_log( __METHOD__ , __FUNCTION__ , func_get_args() , $this->retval );
 		return $this->retval;
 	}
-	
-	function FtrAddPrv($feature,$key,$value)
-	{
+	function FtrAddPrv($feature,$key,$value){
 		if ($this->ot_exist($feature)) {
-			if ($this->ot_can(2,$feature)) {
+			if ($this->ot_can('change',$feature)) {
 				$this->ot_addin($key,$value,'private.json',$feature);
 			}
 		}
 		$this->ot_log( __METHOD__ , __FUNCTION__ , func_get_args() , $this->retval );
 		return $this->retval;
 	}
-	
-	function FtrChgPrv($feature, $key, $value)
-	{
+	function FtrChgPrv($feature, $key, $value){
 		if ($this->ot_exist($feature)) {
-			if ($this->ot_can(3,$feature)) {
+			if ($this->ot_can('change',$feature)) {
 				$this->ot_changein($key,$value,'private.json',$feature);
 			}
 		}
 		$this->ot_log( __METHOD__ , __FUNCTION__ , func_get_args() , $this->retval );
 		return $this->retval;
 	}
-	
-	function FtrDltPrv($feature, $key)
-	{
+	function FtrDltPrv($feature, $key){
 		if ($this->ot_exist($feature)) {
-			if ($this->ot_can(1,$feature)) {
+			if ($this->ot_can('change',$feature)) {
 				$this->ot_deletein($key,'private.json',$feature);
 			}
 		}
 		$this->ot_log( __METHOD__ , __FUNCTION__ , func_get_args() , $this->retval );
 		return $this->retval;
-	}
-
-	function FtrAddPbl($feature, $key, $value)
-	{
+	}	
+	function FtrAddPbl($feature, $key, $value){
 		if ($this->ot_exist($feature)) {
-			if ($this->ot_can(2,$feature)) {
+			if ($this->ot_can('change',$feature)) {
 				$this->ot_addin($key,$value,'public.json',$feature);
 			}
 		}
 		$this->ot_log( __METHOD__ , __FUNCTION__ , func_get_args() , $this->retval );
 		return $this->retval;
-	}
-
-	function FtrChgPbl($feature, $key, $value)
-	{
+	}	
+	function FtrChgPbl($feature, $key, $value){
 		if ($this->ot_exist($feature)) {
-			if ($this->ot_can(3,$feature)) {
+			if ($this->ot_can('change',$feature)) {
 				$this->ot_changein($key,$value,'public.json',$feature);
 			}
 		}
 		$this->ot_log( __METHOD__ , __FUNCTION__ , func_get_args() , $this->retval );
 		return $this->retval;
-	}
-
-	function FtrDltPbl($feature, $key)
-	{
+	}	
+	function FtrDltPbl($feature, $key){
 		if ($this->ot_exist($feature)) {
-			if ($this->ot_can(0,$feature)) {
+			if ($this->ot_can('change',$feature)) {
 				$this->ot_deletein($key,'public.json',$feature);
 			}
 		}
