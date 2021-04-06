@@ -25,7 +25,7 @@ When installing, the necessary environment is defined to define access security,
 
 Relative to the System
 
-The concept of access level is considered.
+The concept of access level is considered, have defined 8 level to can manege containers and content .
 
 The concept of connected / disconnected is considered
 
